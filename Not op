@@ -1,0 +1,70 @@
+local PathfindingService = game:GetService("PathfindingService")
+local player = game.Players.LocalPlayer
+
+local function spawnSmartNPC(name)
+    local model = Instance.new("Model", workspace)
+    model.Name = name
+
+    local humanoid = Instance.new("Humanoid", model)
+
+    local root = Instance.new("Part")
+    root.Size = Vector3.new(2,2,1)
+    root.Position = player.Character.HumanoidRootPart.Position + Vector3.new(0,5,0)
+    root.Name = "HumanoidRootPart"
+    root.Parent = model
+
+    local head = Instance.new("Part")
+    head.Size = Vector3.new(2,1,1)
+    head.Position = root.Position + Vector3.new(0,2,0)
+    head.Name = "Head"
+    head.Parent = model
+
+    local weld = Instance.new("WeldConstraint", root)
+    weld.Part0 = root
+    weld.Part1 = head
+
+    model.PrimaryPart = root
+
+    -- AI
+    task.spawn(function()
+        while humanoid.Health > 0 do
+            task.wait(0.3)
+
+            local target = nil
+            local shortest = math.huge
+
+            for _, plr in pairs(game.Players:GetPlayers()) do
+                if plr ~= player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    local dist = (plr.Character.HumanoidRootPart.Position - root.Position).Magnitude
+                    if dist < shortest then
+                        shortest = dist
+                        target = plr
+                    end
+                end
+            end
+
+            if target then
+                local path = PathfindingService:CreatePath()
+                path:ComputeAsync(root.Position, target.Character.HumanoidRootPart.Position)
+
+                if path.Status == Enum.PathStatus.Success then
+                    for _, waypoint in pairs(path:GetWaypoints()) do
+                        humanoid:MoveTo(waypoint.Position)
+                        humanoid.MoveToFinished:Wait()
+
+                        -- attack
+                        if (target.Character.HumanoidRootPart.Position - root.Position).Magnitude < 6 then
+                            local hum = target.Character:FindFirstChild("Humanoid")
+                            if hum then
+                                hum:TakeDamage(10)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+-- test
+spawnSmartNPC("Smart Zombie")
