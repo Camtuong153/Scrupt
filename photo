@@ -5,7 +5,7 @@ local TweenService = game:GetService("TweenService")
 
 -- 1. CẤU HÌNH
 local PHOTO_ID = "9262784529" -- Thay ID ảnh của bạn tại đây
-local TITLE_TEXT = " ♻️"
+local TITLE_TEXT = "♻️ ERROR"
 
 -- 2. TẠO GIAO DIỆN
 local screenGui = Instance.new("ScreenGui")
