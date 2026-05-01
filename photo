@@ -4,7 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
 -- 1. CẤU HÌNH
-local PHOTO_ID = "18444403508" -- Thay ID ảnh của bạn tại đây
+local PHOTO_ID = "9262784529" -- Thay ID ảnh của bạn tại đây
 local TITLE_TEXT = " ♻️"
 
 -- 2. TẠO GIAO DIỆN
