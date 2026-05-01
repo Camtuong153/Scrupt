@@ -1,7 +1,4 @@
---[[ 
-    SCRIPT HIỂN THỊ ẢNH (PHOTO GUI) - PHIÊN BẢN CÓ NÚT ĐÓNG
-    By:(Gemini)
---]]
+--[[ SCRIPT HIỂN THỊ ẢNH (PHOTO GUI) - PHIÊN BẢN CÓ NÚT ĐÓNG By:(Gemini)--]]
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
