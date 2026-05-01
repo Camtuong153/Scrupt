@@ -1,0 +1,135 @@
+--[[ 
+    SCRIPT HIỂN THỊ ẢNH (PHOTO GUI) - PHIÊN BẢN CÓ NÚT ĐÓNG
+    By:(Gemini)
+--]]
+
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+-- 1. CẤU HÌNH
+local PHOTO_ID = "18444403508" -- Thay ID ảnh của bạn tại đây
+local TITLE_TEXT = " ♻️"
+
+-- 2. TẠO GIAO DIỆN
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "LuanPhotoSystem"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Khung chính
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 300, 0, 230)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -115)
+mainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
+
+-- Bo góc
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = mainFrame
+
+-- Thanh tiêu đề
+local titleBar = Instance.new("TextLabel")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0, 35)
+titleBar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+titleBar.Text = "  " .. TITLE_TEXT
+titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleBar.TextXAlignment = Enum.TextXAlignment.Left
+titleBar.Font = Enum.Font.SourceSansBold
+titleBar.TextSize = 16
+titleBar.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 8)
+titleCorner.Parent = titleBar
+
+-- NÚT ĐÓNG ❌ (Tắt hẳn)
+local closeBtn = Instance.new("TextButton")
+closeBtn.Name = "CloseBtn"
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -32, 0, 2)
+closeBtn.Text = "⛔️"
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeBtn.BackgroundTransparency = 1
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.TextSize = 14
+closeBtn.ZIndex = 10
+closeBtn.Parent = mainFrame
+
+-- NÚT ẨN/HIỆN ℹ️ (Thu nhỏ)
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Name = "ToggleBtn"
+toggleBtn.Size = UDim2.new(0, 30, 0, 30)
+toggleBtn.Position = UDim2.new(1, -62, 0, 2) -- Nằm cạnh nút đóng
+toggleBtn.Text = "🚫"
+toggleBtn.BackgroundTransparency = 1
+toggleBtn.TextColor3 = Color3.new(1, 1, 1)
+toggleBtn.TextSize = 16
+toggleBtn.ZIndex = 10
+toggleBtn.Parent = mainFrame
+
+-- Khung hiển thị ảnh
+local photoDisplay = Instance.new("ImageLabel")
+photoDisplay.Name = "PhotoDisplay"
+photoDisplay.Size = UDim2.new(0.9, 0, 0.75, 0)
+photoDisplay.Position = UDim2.new(0.05, 0, 0.2, 0)
+photoDisplay.BackgroundTransparency = 1
+photoDisplay.Image = "rbxassetid://" .. PHOTO_ID
+photoDisplay.ScaleType = Enum.ScaleType.Fit
+photoDisplay.Parent = mainFrame
+
+--- 3. CHỨC NĂNG ---
+
+-- 1. Chức năng Tắt hẳn (❌)
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy() -- Xóa toàn bộ UI khỏi người chơi
+end)
+
+-- 2. Chức năng Thu nhỏ (ℹ️)
+local isMinimized = false
+toggleBtn.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    local targetSize = isMinimized and UDim2.new(0, 300, 0, 35) or UDim2.new(0, 300, 0, 230)
+    
+    TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {Size = targetSize}):Play()
+    
+    if isMinimized then
+        photoDisplay.Visible = false
+    else
+        task.wait(0.2)
+        photoDisplay.Visible = true
+    end
+end)
+
+-- 3. Chức năng Di chuyển (Drag)
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+        end)
+    end
+end)
+
+mainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then update(input) end
+end)
