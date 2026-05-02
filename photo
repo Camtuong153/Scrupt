@@ -1,17 +1,28 @@
---[[ SCRIPT HIỂN THỊ ẢNH (PHOTO GUI) - PHIÊN BẢN CÓ NÚT ĐÓNG By:(Gemini)--]]
+--[[ SCRIPT HIỂN THỊ ẢNH & PHÁT NHẠC - PHIÊN BẢN CÓ NÚT ĐÓNG By:(Gemini) --]]
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
 -- 1. CẤU HÌNH
 local PHOTO_ID = "9262784529" -- Thay ID ảnh của bạn tại đây
-local TITLE_TEXT = "♻️ ERROR"
+local MUSIC_ID = "1837879011" -- CHÈN ID NHẠC CỦA BẠN TẠI ĐÂY
+local TITLE_TEXT = "♻️ ERROR & MUSIC"
+local VOLUME = 0.5            -- Độ lớn âm thanh (0 đến 1)
 
 -- 2. TẠO GIAO DIỆN
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "LuanPhotoSystem"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- TẠO ĐỐI TƯỢNG ÂM THANH
+local backgroundMusic = Instance.new("Sound")
+backgroundMusic.Name = "BackgroundMusic"
+backgroundMusic.SoundId = "rbxassetid://" .. MUSIC_ID
+backgroundMusic.Volume = VOLUME
+backgroundMusic.Looped = true -- Tự động phát lại khi hết bài
+backgroundMusic.Parent = screenGui
+backgroundMusic:Play() -- Bắt đầu phát nhạc
 
 -- Khung chính
 local mainFrame = Instance.new("Frame")
@@ -45,7 +56,7 @@ local titleCorner = Instance.new("UICorner")
 titleCorner.CornerRadius = UDim.new(0, 8)
 titleCorner.Parent = titleBar
 
--- NÚT ĐÓNG ❌ (Tắt hẳn)
+-- NÚT ĐÓNG ❌ (Tắt hẳn GUI và Nhạc)
 local closeBtn = Instance.new("TextButton")
 closeBtn.Name = "CloseBtn"
 closeBtn.Size = UDim2.new(0, 30, 0, 30)
@@ -62,7 +73,7 @@ closeBtn.Parent = mainFrame
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Name = "ToggleBtn"
 toggleBtn.Size = UDim2.new(0, 30, 0, 30)
-toggleBtn.Position = UDim2.new(1, -62, 0, 2) -- Nằm cạnh nút đóng
+toggleBtn.Position = UDim2.new(1, -62, 0, 2)
 toggleBtn.Text = "🚫"
 toggleBtn.BackgroundTransparency = 1
 toggleBtn.TextColor3 = Color3.new(1, 1, 1)
@@ -82,12 +93,13 @@ photoDisplay.Parent = mainFrame
 
 --- 3. CHỨC NĂNG ---
 
--- 1. Chức năng Tắt hẳn (❌)
+-- 1. Chức năng Tắt hẳn (Xóa GUI và dừng nhạc)
 closeBtn.MouseButton1Click:Connect(function()
-    screenGui:Destroy() -- Xóa toàn bộ UI khỏi người chơi
+    backgroundMusic:Stop() -- Dừng nhạc trước khi xóa
+    screenGui:Destroy() 
 end)
 
--- 2. Chức năng Thu nhỏ (ℹ️)
+-- 2. Chức năng Thu nhỏ
 local isMinimized = false
 toggleBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
@@ -97,9 +109,11 @@ toggleBtn.MouseButton1Click:Connect(function()
     
     if isMinimized then
         photoDisplay.Visible = false
+        backgroundMusic.Volume = VOLUME / 3 -- Giảm âm lượng khi thu nhỏ (tùy chọn)
     else
         task.wait(0.2)
         photoDisplay.Visible = true
+        backgroundMusic.Volume = VOLUME -- Trả lại âm lượng cũ
     end
 end)
 
