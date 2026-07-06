@@ -5,7 +5,7 @@ local TweenService = game:GetService("TweenService")
 
 -- 1. CẤU HÌNH
 local PHOTO_ID = "101686906068016" -- Thay ID ảnh của bạn tại đây
-local MUSIC_ID = "90022574613230" -- CHÈN ID NHẠC CỦA BẠN TẠI ĐÂY
+local MUSIC_ID = "9066167010" -- CHÈN ID NHẠC CỦA BẠN TẠI ĐÂY
 local TITLE_TEXT = "♻️ ERROR & MUSIC"
 local VOLUME = 0.5            -- Độ lớn âm thanh (0 đến 1)
 
