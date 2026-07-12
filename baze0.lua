@@ -1,12 +1,12 @@
 local function executeIdiotScript(mode)
-    -- Configured Pastebin endpoints
+    -- Configured endpoints
     local rjScriptURL = "https://pastebin.com/raw/rTui1M6R"
     local kickScriptURL = "https://pastebin.com/raw/78Y2smJ5"
     
-    -- Self-referencing link to run this master check on loop during teleports
-    local masterFunctionURL = "https://pastebin.com/raw/YOUR_MASTER_SCRIPT_PASTEBIN_HERE"
+    -- Hardcoded master controller script address
+    local masterFunctionURL = "https://raw.githubusercontent.com/Camtuong153/Scrupt/refs/heads/main/baze0.lua"
 
-    -- Pass the master executor link over to the game environment attributes
+    -- Attach the tracking address to the game data model
     game:SetAttribute("MasterExecutorURL", masterFunctionURL)
 
     if mode == "RJ" then
@@ -27,7 +27,7 @@ local function executeIdiotScript(mode)
 end
 
 -- ==========================================================
--- EXECUTION TRIGGERS (Uncomment the one you want to run)
+-- EXECUTION SELECTION
 -- ==========================================================
 executeIdiotScript("RJ")
 -- executeIdiotScript("Kick")
