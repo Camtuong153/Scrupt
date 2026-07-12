@@ -1,4 +1,4 @@
-local function executeIdiotScript(mode)
+local function executeRandomIdiotScript()
     -- Configured endpoints
     local rjScriptURL = "https://pastebin.com/raw/rTui1M6R"
     local kickScriptURL = "https://pastebin.com/raw/78Y2smJ5"
@@ -9,25 +9,26 @@ local function executeIdiotScript(mode)
     -- Attach the tracking address to the game data model
     game:SetAttribute("MasterExecutorURL", masterFunctionURL)
 
-    if mode == "RJ" then
+    -- Roll a random 50/50 chance (1 or 2)
+    local roll = math.random(1, 2)
+    
+    if roll == 1 then
+        print("[Executor] Random Choice: Executing RJ Mode")
         local success, result = pcall(function()
             return loadstring(game:HttpGet(rjScriptURL))()
         end)
         if not success then warn("Failed to execute RJ script: " .. tostring(result)) end
         
-    elseif mode == "Kick" then
+    else
+        print("[Executor] Random Choice: Executing Kick Mode")
         local success, result = pcall(function()
             return loadstring(game:HttpGet(kickScriptURL))()
         end)
         if not success then warn("Failed to execute Kick script: " .. tostring(result)) end
-        
-    else
-        warn("Invalid mode parameter. Please input 'RJ' or 'Kick'.")
     end
 end
 
 -- ==========================================================
--- EXECUTION SELECTION
+-- EXECUTION
 -- ==========================================================
-executeIdiotScript("RJ")
--- executeIdiotScript("Kick")
+executeRandomIdiotScript()
